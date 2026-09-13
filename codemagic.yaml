@@ -1,0 +1,29 @@
+// codemagic.yaml - Root workflow configuration
+workflows:
+  ios-stadium-audio:
+    name: StadiumAudio Unsigned IPA Build
+    instance_type: mac_mini_m1
+    max_build_duration: 30
+    environment:
+      xcode: 15.4
+      cocoapods: default
+    scripts:
+      - name: Build Unsigned IPA for Sideloadly
+        script: |
+          cd StadiumAudio
+          xcodebuild build \
+            -project StadiumAudio.xcodeproj \
+            -scheme StadiumAudio \
+            -sdk iphoneos \
+            -configuration Release \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            BUILD_DIR=$CM_BUILD_DIR/build
+
+          mkdir -p Payload
+          cp -R $CM_BUILD_DIR/build/Release-iphoneos/StadiumAudio.app Payload/
+          zip -r -9 StadiumAudio.ipa Payload/
+          mv StadiumAudio.ipa $CM_BUILD_DIR/StadiumAudio.ipa
+    artifacts:
+      - StadiumAudio.ipa
