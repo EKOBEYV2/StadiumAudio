@@ -19,8 +19,9 @@ workflows:
             CODE_SIGNING_ALLOWED=NO \
             BUILD_DIR=$CM_BUILD_DIR/build
 
+          cd $CM_BUILD_DIR/build/Release-iphoneos
           mkdir -p Payload
-          cp -R $CM_BUILD_DIR/build/Release-iphoneos/StadiumAudio.app Payload/
+          cp -R StadiumAudio.app Payload/
           zip -r -9 StadiumAudio.ipa Payload/
           mv StadiumAudio.ipa $CM_BUILD_DIR/StadiumAudio.ipa
     artifacts:
