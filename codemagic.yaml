@@ -9,9 +9,8 @@ workflows:
     scripts:
       - name: Build Unsigned IPA for Sideloadly
         script: |
-          cd StadiumAudio
           xcodebuild build \
-            -project StadiumAudio.xcodeproj \
+            -project StadiumAudio/StadiumAudio.xcodeproj \
             -scheme StadiumAudio \
             -sdk iphoneos \
             -configuration Release \
