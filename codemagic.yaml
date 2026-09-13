@@ -10,12 +10,13 @@ workflows:
       - name: Build Unsigned IPA for Sideloadly
         script: |
           set -e
-          echo "=== Step 1: Navigating to StadiumAudio ==="
-          cd StadiumAudio
+          echo "=== Step 1: Locating Xcode Project ==="
+          PROJECT_PATH=$(find . -name "StadiumAudio.xcodeproj" -maxdepth 3)
+          echo "Found project at: $PROJECT_PATH"
           
           echo "=== Step 2: Running Xcode Archive ==="
           xcodebuild archive \
-            -project StadiumAudio.xcodeproj \
+            -project "$PROJECT_PATH" \
             -scheme StadiumAudio \
             -sdk iphoneos \
             -configuration Release \
