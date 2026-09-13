@@ -9,19 +9,31 @@ workflows:
     scripts:
       - name: Build Unsigned IPA for Sideloadly
         script: |
-          cd StadiumAudio
+          set -e
+          echo "=== Step 1: Listing Workspace Files ==="
+          ls -la
+          
+          echo "=== Step 2: Running Xcode Archive ==="
           xcodebuild archive \
-            -project StadiumAudio.xcodeproj \
+            -project StadiumAudio/StadiumAudio.xcodeproj \
             -scheme StadiumAudio \
             -sdk iphoneos \
+            -configuration Release \
             -archivePath $CM_BUILD_DIR/StadiumAudio.xcarchive \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO
 
+          echo "=== Step 3: Checking Archive Content ==="
+          ls -la $CM_BUILD_DIR/StadiumAudio.xcarchive/Products/Applications/
+
+          echo "=== Step 4: Creating Payload Structure ==="
           mkdir -p Payload
           cp -R $CM_BUILD_DIR/StadiumAudio.xcarchive/Products/Applications/StadiumAudio.app Payload/
           zip -r -9 StadiumAudio.ipa Payload/
           mv StadiumAudio.ipa $CM_BUILD_DIR/StadiumAudio.ipa
+          
+          echo "=== Step 5: Verification ==="
+          ls -lh $CM_BUILD_DIR/StadiumAudio.ipa
     artifacts:
       - StadiumAudio.ipa
