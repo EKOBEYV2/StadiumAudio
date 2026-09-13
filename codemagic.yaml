@@ -1,4 +1,3 @@
-// codemagic.yaml - Root workflow configuration
 workflows:
   ios-stadium-audio:
     name: StadiumAudio Unsigned IPA Build
